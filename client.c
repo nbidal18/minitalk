@@ -6,50 +6,32 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/23 17:19:17 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/04/23 18:05:39 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// --------------------------- LIBRARIES --------------------------- //
+// --------------- LIBRARIES (TO REMOVE) --------------- //
 
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-// --------------------------- TESTING --------------------------- //
+// --------------- IMPORTANT (NOTES / TO-DOS) --------------- //
 
-// make a program which stays open and closes when I press ctrl + c
+// * need to use ft_printf() instead of printf()
 
-/* SERVER TESTING
-void signal_handler(int signum) 
-{
-	printf("\nReceived SIGINT!\n");
-	exit(0);
-}
-
-int main() 
-{
-	int i = 0;
-	pid_t pid = getpid();
-
-	printf("Program started with PID: %d\n", pid);
-	signal(SIGINT, signal_handler);
-	signal(SIGTERM, signal_handler);
-	while (1)
-	{
-		i++;
-	}
-	return 0;
-}
-*/
-
-// --------------------------- ACTUAL CODE --------------------------- //
+// ------------------- CODE ------------------- //
 
 // client writes, text is converted to bits, sent with signals,
 // server receives, converts bits to text and prints
 // ./a.out  <PID>  <message>
 // argv[0] argv[1]  argv[2]
+
+void	send_signals(int pid, char *message)
+{
+	
+}
 
 int	ft_atoi(const char *str)
 {
@@ -100,7 +82,6 @@ void	decrypt_message(char *message, char key)
 	encrypt_message(message, key);
 }
 
-
 void	copy(char *source, char *dest)
 {
 	int	i;
@@ -114,26 +95,38 @@ void	copy(char *source, char *dest)
 	dest[i] = '\0';
 }
 
+/* TO PUT SOMEWHERE ELSE, WAS IN MAIN()
+char	key;
+
+copy(argv[2], message);
+key = 'A';
+encrypt_message(message, key);
+*/
+
 int	main(int argc, char *argv[])
 {
-	pid_t	pid;
+	int		server_pid;
 	char	*message;
-	char	key;
 
-	// get the PID
-	pid = atoi(argv[1]);
-	// get the string inside of  str message
-	message = argv[2];
-	copy(argv[2], message);
-	// here I succesfully have both the PID and the message
-	key = 'A'; // takes the first letter of the message
-	printf("Original PID: %s\n", argv[1]);
-	printf("My PID: %d\n", pid);
-	printf("Original message: %s\n", argv[2]);
-	printf("My message: %s\n", message);
-	encrypt_message(message, key);
-	printf("Encrypted message: %s\n", message);
-	decrypt_message(message, key);
-	printf("Decrypted message: %s\n", message);
-	printf("Encryption key: %c\n", key);
+	if (argc == 3)
+	{
+		server_pid = atoi(argv[1]);
+		if (server_pid == NULL)
+		{
+			printf("[ERROR] Wrong PID.\n");
+			return (0);
+		}
+		message = argv[2];
+		if (message[0] == '\0')
+		{
+			printf("[ERROR] Insert some text.\n");
+			return (0);
+		}
+		send_signals(server_pid, message);
+	}
+	else if (argc > 3)
+		printf("[ERROR] Too many arguments.\ntry: ./client <pid> <message>\n");
+	else if (argc < 3)
+		printf("[ERROR] Too few arguments.\ntry: ./client <pid> <message>\n");
+	return (0);
 }

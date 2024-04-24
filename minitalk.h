@@ -6,16 +6,32 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:19:13 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/23 17:19:23 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/04/24 16:53:52 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define 	MINITALK_H
+// --------------- IMPORTANT (NOTES / TO-DOS) --------------- //
 
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+// * need to use ft_printf() instead of printf()
+
+// ------------------- CODE ------------------- //
+
+// client writes, text is converted to bits, sent with signals,
+// server receives, converts bits to text and prints
+// ./a.out  <PID>  <message>
+// argv[0] argv[1]  argv[2]
+
+#ifndef MINITALK_H
+# define MINITALK_H
+
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+
+typedef struct list
+{
+	
+} sigaction;
 
 #endif

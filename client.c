@@ -6,31 +6,36 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/23 18:05:39 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/04/24 16:46:59 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// --------------- LIBRARIES (TO REMOVE) --------------- //
-
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-// --------------- IMPORTANT (NOTES / TO-DOS) --------------- //
-
-// * need to use ft_printf() instead of printf()
-
-// ------------------- CODE ------------------- //
-
-// client writes, text is converted to bits, sent with signals,
-// server receives, converts bits to text and prints
-// ./a.out  <PID>  <message>
-// argv[0] argv[1]  argv[2]
+#include "minitalk.h"
 
 void	send_signals(int pid, char *message)
 {
-	
+	int	i;
+	int	j;
+
+	i = 0;
+	while (message[i] != '\0')
+	{
+		j = -1;
+		while (++j < 8)
+		{
+			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 0)
+				kill(pid, SIGUSR1);
+			else if (((unsigned char)(message[i] >> (7 - j)) & 1) == 1)
+				kill(pid, SIGUSR2);
+			usleep(50);
+		}
+		i++;
+	}
+	while (j++ < 8)
+	{
+		kill(pid, SIGUSR1);
+		usleep(50);
+	}
 }
 
 int	ft_atoi(const char *str)
@@ -59,49 +64,6 @@ int	ft_atoi(const char *str)
 		return (result * sign);
 	return (result);
 }
-
-void	encrypt_message(char *message, char key)
-{
-	int	i;
-	int	len;
-
-	len = 0;
-	while (message[len] != '\0')
-		len++;
-
-	i = 0;
-	while (i < len)
-	{
-		message[i] = message[i] ^ key;
-		i++;
-	}
-}
-
-void	decrypt_message(char *message, char key)
-{
-	encrypt_message(message, key);
-}
-
-void	copy(char *source, char *dest)
-{
-	int	i;
-
-	i = 0;
-	while (source[i] != '\0')
-	{
-		dest[i] = source[i];
-		i++;
-	}
-	dest[i] = '\0';
-}
-
-/* TO PUT SOMEWHERE ELSE, WAS IN MAIN()
-char	key;
-
-copy(argv[2], message);
-key = 'A';
-encrypt_message(message, key);
-*/
 
 int	main(int argc, char *argv[])
 {

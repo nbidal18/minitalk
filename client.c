@@ -6,7 +6,7 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/24 16:46:59 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/04/25 18:16:24 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int argc, char *argv[])
 	if (argc == 3)
 	{
 		server_pid = atoi(argv[1]);
-		if (server_pid == NULL)
+		if (server_pid == 0)
 		{
 			printf("[ERROR] Wrong PID.\n");
 			return (0);

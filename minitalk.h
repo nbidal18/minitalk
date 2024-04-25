@@ -6,7 +6,7 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:19:13 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/24 16:53:52 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/04/25 10:33:30 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,5 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-typedef struct list
-{
-	
-} sigaction;
 
 #endif

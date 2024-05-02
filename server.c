@@ -6,11 +6,26 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:45:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/02 13:44:18 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/02 16:07:37 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+int	ft_recursive_power(int nb, int power)
+{
+	int	res;
+
+	if (power == 0)
+		return (1);
+	else if (power < 0)
+		return (0);
+	else
+	{
+		res = nb * ft_recursive_power(nb, power - 1);
+		return (res);
+	}
+}
 
 int	ft_strlen(const char *s)
 {
@@ -42,21 +57,6 @@ char	*ft_strdup(const char *s1)
 	return (str);
 }
 
-int	ft_recursive_power(int nb, int power)
-{
-	int	res;
-
-	if (power == 0)
-		return (1);
-	else if (power < 0)
-		return (0);
-	else
-	{
-		res = nb * ft_recursive_power(nb, power - 1);
-		return (res);
-	}
-}
-
 char	*letter_to_string(char const *s1, char const letter)
 {
 	int		i;
@@ -79,28 +79,28 @@ char	*letter_to_string(char const *s1, char const letter)
 
 void	signal_handler(int signum)
 {
-	static int	counter = 0;
-	static int	result = 0;
+	static int	i = 0;
+	static int	str = 0;
 	static int	len = 0;
-	static char	*final;
+	static char	*end_str;
 
-	if (!final)
-		final = ft_strdup("");
+	if (end_str == NULL)
+		end_str = ft_strdup("");
 	if (signum == SIGUSR1)
-		result = result + 0;
+		str = str + 0;
 	else if (signum == SIGUSR2)
-		result = result + (1 * ft_recursive_power(2, 7 - counter));
-	counter++;
-	if (counter == 8)
+		str = str + (1 * ft_recursive_power(2, 7 - i));
+	i++;
+	if (i == 8)
 	{
-		final = letter_to_string(final, result);
-		if (result == '\0')
+		end_str = letter_to_string(end_str, str);
+		if (str == '\0')
 		{
-			printf("%s\n", final);
-			final = NULL;
+			printf("%s\n", end_str);
+			end_str = NULL;
 		}
-		counter = 0;
-		result = 0;
+		i = 0;
+		str = 0;
 		len += 1;
 	}
 }
@@ -109,8 +109,8 @@ int	main(void)
 {
 	struct sigaction	signal_received;
 
-	printf("Welcome to lfabbian's server :-)\n");
-	printf("Server's PID: %d\n", getpid());
+	printf("--> nbidal's server\n");
+	printf("--> PID: %d\n", getpid());
 	signal_received.sa_handler = signal_handler;
 	signal_received.sa_flags = 0;
 	sigaction(SIGUSR1, &signal_received, NULL);

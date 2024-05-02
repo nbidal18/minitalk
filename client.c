@@ -6,37 +6,38 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/02 13:46:09 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/02 15:57:27 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	send_signals(int pid, char *message)
+void	send_signals(int server_id, char *message)
 {
-	int				letter;
-	int				i;
+	int	i;
+	int	j;
 
-	letter = 0;
-	while (message[letter])
+	i = 0;
+	while (message[i] != '\0')
 	{
-		i = -1;
-		while (++i < 8)
+		j = -1;
+		while (++j < 8)
 		{
-			if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 0)
-				kill(pid, SIGUSR1);
-			else if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 1)
-				kill(pid, SIGUSR2);
+			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 0)
+				kill(server_id, SIGUSR1);
+			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 1)
+				kill(server_id, SIGUSR2);
 			usleep(50);
 		}
-	letter++;
+		i++;
 	}
-	i = 0;
-	while (i++ < 8)
+	j = 0;
+	while (j++ < 8)
 	{
-		kill(pid, SIGUSR1);
+		kill(server_id, SIGUSR1);
 		usleep(50);
 	}
+	
 }
 
 int	ft_atoi(const char *str)
@@ -68,29 +69,23 @@ int	ft_atoi(const char *str)
 
 int	main(int argc, char **argv)
 {
-	char				*message;
-	int					server_id;
+	char	*message;
+	int		server_id;
 
 	if (argc == 3)
 	{
 		server_id = ft_atoi(argv[1]);
-		if (!server_id)
-		{
-			printf("[ERROR]. Wrong arg");
-			return (0);
-		}
+		if (server_id == 0)
+			printf("[ERROR] Can't copy-paste the PID? bruh.\n");
 		message = argv[2];
-		if (message[0] == 0)
-		{
-			printf("Tu n'as envoyé aucun texte ! Ecris qqch pls :)");
-			return (0);
-		}
-		send_signals(server_id, message);
+		if (message[0] == '\0')
+			printf("[ERROR] Type something duh.\n");
+		if (server_id && message[0])
+			send_signals(server_id, message);
 	}
 	else
 	{
-		printf("[ERROR]. Too much or too few arguments.\n Make sure ");
-		printf("you enter arguments as follow: ./client <PID> <MESSAGE>");
+		printf("[ERROR] Usage: ./Client 1234 \"hello world\"\n");
 	}
 	return (0);
 }

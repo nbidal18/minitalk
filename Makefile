@@ -8,7 +8,7 @@ COMMON_SRCS = minitalk.h
 SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 .PHONY: all clean fclean re

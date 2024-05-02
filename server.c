@@ -6,27 +6,11 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:45:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/25 18:22:58 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/02 13:44:18 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <signal.h>
-
-int	ft_recursive_power(int nbr, int power)
-{
-	int	res;
-
-	if (power == 0)
-		return (1);
-	else if (power < 0)
-		return (0);
-	else
-	{
-		res = nbr * ft_recursive_power(nbr, power - 1);
-		return (res);
-	}
-}
 
 int	ft_strlen(const char *s)
 {
@@ -36,39 +20,6 @@ int	ft_strlen(const char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
-}
-
-char	*make_string(char *str, char const letter)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	new_str = malloc((ft_strlen(str) + 2) * sizeof(char));
-	if (NULL == new_str)
-		return (NULL);
-	while (str[i] != '\0')
-		new_str[j++] = str[i++];
-	i = 0;
-	new_str[j++] = letter;
-	new_str[j] = '\0';
-	free ((void *)(str));
-	return (new_str);
-}
-
-void	end(char *final, int result, int counter, int len)
-{
-	final = make_string(final, result);
-	if (result == '\0')
-	{
-		printf("%s\n", final);
-		final = NULL;
-	}
-	counter = 0;
-	result = 0;
-	len += 1;
 }
 
 char	*ft_strdup(const char *s1)
@@ -91,6 +42,41 @@ char	*ft_strdup(const char *s1)
 	return (str);
 }
 
+int	ft_recursive_power(int nb, int power)
+{
+	int	res;
+
+	if (power == 0)
+		return (1);
+	else if (power < 0)
+		return (0);
+	else
+	{
+		res = nb * ft_recursive_power(nb, power - 1);
+		return (res);
+	}
+}
+
+char	*letter_to_string(char const *s1, char const letter)
+{
+	int		i;
+	int		j;
+	char	*tab;
+
+	i = 0;
+	j = 0;
+	tab = malloc((ft_strlen(s1) + 2) * sizeof(char));
+	if (!tab)
+		return (NULL);
+	while (s1[i])
+		tab[j++] = s1[i++];
+	i = 0;
+	tab[j++] = letter;
+	tab[j] = 0;
+	free ((void *)(s1));
+	return (tab);
+}
+
 void	signal_handler(int signum)
 {
 	static int	counter = 0;
@@ -107,7 +93,15 @@ void	signal_handler(int signum)
 	counter++;
 	if (counter == 8)
 	{
-		end(final, result, counter, len);
+		final = letter_to_string(final, result);
+		if (result == '\0')
+		{
+			printf("%s\n", final);
+			final = NULL;
+		}
+		counter = 0;
+		result = 0;
+		len += 1;
 	}
 }
 
@@ -115,12 +109,12 @@ int	main(void)
 {
 	struct sigaction	signal_received;
 
-	printf("Welcome to nbidal's server\n");
+	printf("Welcome to lfabbian's server :-)\n");
 	printf("Server's PID: %d\n", getpid());
 	signal_received.sa_handler = signal_handler;
 	signal_received.sa_flags = 0;
 	sigaction(SIGUSR1, &signal_received, NULL);
 	sigaction(SIGUSR2, &signal_received, NULL);
 	while (1)
-		sleep(50);
+		usleep(50);
 }

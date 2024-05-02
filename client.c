@@ -6,7 +6,7 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/04/25 18:16:24 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/02 13:46:09 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,25 @@
 
 void	send_signals(int pid, char *message)
 {
-	int	i;
-	int	j;
+	int				letter;
+	int				i;
 
-	i = 0;
-	while (message[i] != '\0')
+	letter = 0;
+	while (message[letter])
 	{
-		j = -1;
-		while (++j < 8)
+		i = -1;
+		while (++i < 8)
 		{
-			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 0)
+			if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 0)
 				kill(pid, SIGUSR1);
-			else if (((unsigned char)(message[i] >> (7 - j)) & 1) == 1)
+			else if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 1)
 				kill(pid, SIGUSR2);
 			usleep(50);
 		}
-		i++;
+	letter++;
 	}
-	while (j++ < 8)
+	i = 0;
+	while (i++ < 8)
 	{
 		kill(pid, SIGUSR1);
 		usleep(50);
@@ -65,30 +66,31 @@ int	ft_atoi(const char *str)
 	return (result);
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char **argv)
 {
-	int		server_pid;
-	char	*message;
+	char				*message;
+	int					server_id;
 
 	if (argc == 3)
 	{
-		server_pid = atoi(argv[1]);
-		if (server_pid == 0)
+		server_id = ft_atoi(argv[1]);
+		if (!server_id)
 		{
-			printf("[ERROR] Wrong PID.\n");
+			printf("[ERROR]. Wrong arg");
 			return (0);
 		}
 		message = argv[2];
-		if (message[0] == '\0')
+		if (message[0] == 0)
 		{
-			printf("[ERROR] Insert some text.\n");
+			printf("Tu n'as envoyé aucun texte ! Ecris qqch pls :)");
 			return (0);
 		}
-		send_signals(server_pid, message);
+		send_signals(server_id, message);
 	}
-	else if (argc > 3)
-		printf("[ERROR] Too many arguments.\ntry: ./client <pid> <message>\n");
-	else if (argc < 3)
-		printf("[ERROR] Too few arguments.\ntry: ./client <pid> <message>\n");
+	else
+	{
+		printf("[ERROR]. Too much or too few arguments.\n Make sure ");
+		printf("you enter arguments as follow: ./client <PID> <MESSAGE>");
+	}
 	return (0);
 }

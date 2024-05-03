@@ -6,13 +6,13 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/02 15:57:27 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/03 17:28:19 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	send_signals(int server_id, char *message)
+void	send_signals(int pid, char *message)
 {
 	int	i;
 	int	j;
@@ -23,21 +23,19 @@ void	send_signals(int server_id, char *message)
 		j = -1;
 		while (++j < 8)
 		{
-			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 0)
-				kill(server_id, SIGUSR1);
-			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 1)
-				kill(server_id, SIGUSR2);
-			usleep(50);
+			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 0) // this bugs me a little bit, the "& 1" simply extracts the last bit and compares it 
+				kill(pid, SIGUSR1);
+			else if (((unsigned char)(message[i] >> (7 - j)) & 1) == 1)
+				kill(pid, SIGUSR2);
+			usleep(50); // why do we use usleep()? instead of I guess sleep()?
 		}
 		i++;
 	}
-	j = 0;
 	while (j++ < 8)
 	{
-		kill(server_id, SIGUSR1);
+		kill(pid, SIGUSR1);
 		usleep(50);
 	}
-	
 }
 
 int	ft_atoi(const char *str)
@@ -67,25 +65,30 @@ int	ft_atoi(const char *str)
 	return (result);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char *argv[])
 {
+	int		server_pid;
 	char	*message;
-	int		server_id;
 
 	if (argc == 3)
 	{
-		server_id = ft_atoi(argv[1]);
-		if (server_id == 0)
-			printf("[ERROR] Can't copy-paste the PID? bruh.\n");
+		server_pid = atoi(argv[1]);
+		if (server_pid == 0)
+		{
+			printf("[ERROR] Wrong PID.\n");
+			return (0);
+		}
 		message = argv[2];
 		if (message[0] == '\0')
-			printf("[ERROR] Type something duh.\n");
-		if (server_id && message[0])
-			send_signals(server_id, message);
+		{
+			printf("[ERROR] Insert some text.\n");
+			return (0);
+		}
+		send_signals(server_pid, message);
 	}
-	else
-	{
-		printf("[ERROR] Usage: ./Client 1234 \"hello world\"\n");
-	}
+	else if (argc > 3)
+		printf("[ERROR] Too many arguments.\ntry: ./client <pid> <message>\n");
+	else if (argc < 3)
+		printf("[ERROR] Too few arguments.\ntry: ./client <pid> <message>\n");
 	return (0);
 }

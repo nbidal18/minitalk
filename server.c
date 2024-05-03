@@ -6,26 +6,11 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:45:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/02 16:07:37 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/03 17:28:13 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-int	ft_recursive_power(int nb, int power)
-{
-	int	res;
-
-	if (power == 0)
-		return (1);
-	else if (power < 0)
-		return (0);
-	else
-	{
-		res = nb * ft_recursive_power(nb, power - 1);
-		return (res);
-	}
-}
 
 int	ft_strlen(const char *s)
 {
@@ -57,58 +42,61 @@ char	*ft_strdup(const char *s1)
 	return (str);
 }
 
-char	*letter_to_string(char const *s1, char const letter)
+int	
+
+char	*letter_to_string(char const *str, char const result)
 {
 	int		i;
 	int		j;
-	char	*tab;
+	char	*tmp_str;
 
 	i = 0;
 	j = 0;
-	tab = malloc((ft_strlen(s1) + 2) * sizeof(char));
-	if (!tab)
+	tmp_str = malloc((ft_strlen(str) + 2) * sizeof(char));
+	if (tmp_str == NULL)
 		return (NULL);
-	while (s1[i])
-		tab[j++] = s1[i++];
 	i = 0;
-	tab[j++] = letter;
-	tab[j] = 0;
-	free ((void *)(s1));
-	return (tab);
+	tmp_str[j++] = result;
+	tmp_str[j] = '\0';
+	free ((void *)(str));
+	return (tmp_str);
 }
 
 void	signal_handler(int signum)
 {
-	static int	i = 0;
-	static int	str = 0;
-	static int	len = 0;
-	static char	*end_str;
+	static int	i; // why are these static?
+	static int	result;
+	static int	len;
+	static char	*str;
 
-	if (end_str == NULL)
-		end_str = ft_strdup("");
+	i = 0;
+	result = 0;
+	len = 0;
+	if (str == NULL)
+		str = ft_strdup("");
 	if (signum == SIGUSR1)
-		str = str + 0;
+		result = result + 0; // does this turn it into a char or what bruh *** // I guess result is the result we get once we receive all 8 bits
 	else if (signum == SIGUSR2)
-		str = str + (1 * ft_recursive_power(2, 7 - i));
+		result = result + (1 * ft_recursive_power(2, 7 - i)); // what the hell is this
 	i++;
 	if (i == 8)
 	{
-		end_str = letter_to_string(end_str, str);
-		if (str == '\0')
+		str = letter_to_string(str, result); // how come letter_to_string() is going to receive result as a char when it has been declaered as an int? ***
+		if (result == '\0')
 		{
-			printf("%s\n", end_str);
-			end_str = NULL;
+			printf("%s\n", str);
+			str = NULL;
 		}
 		i = 0;
-		str = 0;
+		result = 0;
 		len += 1;
 	}
 }
 
-int	main(void)
+int	main(void) // I really need to understand how both this while and this signal_received struct work
 {
 	struct sigaction	signal_received;
-
+	
 	printf("--> nbidal's server\n");
 	printf("--> PID: %d\n", getpid());
 	signal_received.sa_handler = signal_handler;

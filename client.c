@@ -6,7 +6,7 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/07 15:55:09 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/07 16:50:11 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int argc, char **argv)
 
 	if (argc == 3)
 	{
-		pid = atoi(argv[1]);
+		pid = ft_atoi(argv[1]);
 		if (pid == 0)
 		{
 			printf("[ERROR] Can't copy paste the PID? bruh.\n");

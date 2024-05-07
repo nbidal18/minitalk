@@ -6,13 +6,13 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/07 15:03:53 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/07 15:55:09 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int	ft_atoi(const char *str)
+int	ft_atoi(const char *str) // from my Libft
 {
 	int	i;
 	int	result;
@@ -41,56 +41,55 @@ int	ft_atoi(const char *str)
 
 void	send_signals(int pid, char *message)
 {
-	int				letter;
-	int				i;
+	int	i;
+	int	j;
 
-	letter = 0;
-	while (message[letter])
+	i = 0;
+	while (message[i]) // to send zeros and ones with the respective signal until 8 have been sent
 	{
-		i = -1;
-		while (++i < 8)
+		j = -1;
+		while (++j < 8)
 		{
-			if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 0)
+			if (((unsigned char)(message[i] >> (7 - j)) & 1) == 0) // this bugs me a little bit, the "& 1" simply extracts the last bit and compares it 
 				kill(pid, SIGUSR1);
-			else if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 1)
+			else if (((unsigned char)(message[i] >> (7 - j)) & 1) == 1)
 				kill(pid, SIGUSR2);
 			usleep(50);
 		}
-	letter++;
+		i++;
 	}
-	i = 0;
-	while (i++ < 8)
+	j = 0;
+	while (j++ < 8) // to add padding I guess, but why do I reset to 0 just before??
 	{
 		kill(pid, SIGUSR1);
-		usleep(50);
+		usleep(50); // why do we use usleep()? I guess there's also a sleep()??
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	char				*message;
-	int					server_id;
+	char	*message;
+	int		pid;
 
 	if (argc == 3)
 	{
-		server_id = ft_atoi(argv[1]);
-		if (!server_id)
+		pid = atoi(argv[1]);
+		if (pid == 0)
 		{
-			printf("[ERROR]. Wrong arg");
+			printf("[ERROR] Can't copy paste the PID? bruh.\n");
 			return (0);
 		}
 		message = argv[2];
-		if (message[0] == 0)
+		if (message[0] == '\0')
 		{
-			printf("Tu n'as envoyé aucun texte ! Ecris qqch pls :)");
+			printf("[ERROR] How about you insert some text duh.\n");
 			return (0);
 		}
-		send_signals(server_id, message);
+		send_signals(pid, message);
 	}
-	else
-	{
-		printf("[ERROR]. Too much or too few arguments.\n Make sure ");
-		printf("you enter arguments as follow: ./client <PID> <MESSAGE>");
-	}
+	else if (argc > 3)
+		printf("[ERROR] Too many arguments.\nTry ./client <pid> <message>\n");
+	else if (argc < 3)
+		printf("[ERROR] Too few arguments.\nTry ./client <pid> <message>\n");
 	return (0);
 }

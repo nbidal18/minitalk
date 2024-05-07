@@ -6,7 +6,7 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:45:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/07 15:03:48 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/07 16:29:13 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,31 +72,28 @@ char	*letter_to_string(char const *s1, char const letter)
 		tab[j++] = s1[i++];
 	i = 0;
 	tab[j++] = letter;
-	tab[j] = 0;
+	tab[j] = '\0';
 	free ((void *)(s1));
 	return (tab);
 }
 
 void	signal_handler(int signum)
 {
-	static int	counter;
-	static int	result;
-	static int	len;
+	static int	counter = 0;
+	static int	result = 0;
+	static int	len = 0;
 	static char	*final;
 
-	counter = 0;
-	result = 0;
-	len = 0;
 	if (!final)
 		final = ft_strdup("");
 	if (signum == SIGUSR1)
-		result = result + 0;
+		result = result + 0; // does this turn it into a char or what bruh *** // I guess result is the result we get once we receive all 8 bits
 	else if (signum == SIGUSR2)
-		result = result + (1 * ft_recursive_power(2, 7 - counter));
+		result = result + (1 * ft_recursive_power(2, 7 - counter)); // what the hell is this
 	counter++;
 	if (counter == 8)
 	{
-		final = letter_to_string(final, result);
+		final = letter_to_string(final, result); // how come letter_to_string() is going to receive result as a char when it has been declaered as an int? ***
 		if (result == '\0')
 		{
 			printf("%s\n", final);
@@ -108,12 +105,13 @@ void	signal_handler(int signum)
 	}
 }
 
-int	main(void)
+int	main(void) // I really need to understand how both this while and this signal_received struct work
 {
 	struct sigaction	signal_received;
 
-	printf("Welcome to lfabbian's server :-)\n");
-	printf("Server's PID: %d\n", getpid());
+	printf("> nbidal's server\n");
+	printf("> PID: %d\n", getpid());
+	printf("> Output below...\n");
 	signal_received.sa_handler = signal_handler;
 	signal_received.sa_flags = 0;
 	sigaction(SIGUSR1, &signal_received, NULL);

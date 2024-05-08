@@ -6,41 +6,12 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:45:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/07 16:29:13 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/08 17:42:48 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-int	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	int		lens;
-	char	*str;
-	int		i;
-
-	i = 0;
-	lens = ft_strlen(s1) + 1;
-	str = (char *)malloc(lens * sizeof(char));
-	if (str == NULL)
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
+#include "ft_printf/ft_printf.h"
 
 int	ft_recursive_power(int nb, int power)
 {
@@ -96,7 +67,7 @@ void	signal_handler(int signum)
 		final = letter_to_string(final, result); // how come letter_to_string() is going to receive result as a char when it has been declaered as an int? ***
 		if (result == '\0')
 		{
-			printf("%s\n", final);
+			ft_printf("%s\n", final);
 			final = NULL;
 		}
 		counter = 0;
@@ -109,9 +80,9 @@ int	main(void) // I really need to understand how both this while and this signa
 {
 	struct sigaction	signal_received;
 
-	printf("> nbidal's server\n");
-	printf("> PID: %d\n", getpid());
-	printf("> Output below...\n");
+	ft_printf("> nbidal's server\n");
+	ft_printf("> PID: %d\n", getpid());
+	ft_printf("> Output below...\n");
 	signal_received.sa_handler = signal_handler;
 	signal_received.sa_flags = 0;
 	sigaction(SIGUSR1, &signal_received, NULL);

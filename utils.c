@@ -6,12 +6,11 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 17:05:51 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/08 17:42:57 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/08 17:58:45 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include "ft_printf/ft_printf.h"
 
 int	ft_atoi(const char *str)
 {

@@ -6,12 +6,14 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:19:13 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/08 17:42:44 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/08 17:59:44 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
+
+#include "ft_printf/ft_printf.h"
 
 # include <signal.h>
 # include <stdio.h>

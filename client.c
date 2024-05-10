@@ -6,12 +6,11 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:22:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/08 17:50:34 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/08 17:58:48 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include "ft_printf/ft_printf.h"
 
 void	send_signals(int pid, char *message)
 {

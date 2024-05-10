@@ -6,12 +6,11 @@
 /*   By: nbidal <nbidal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:45:55 by nbidal            #+#    #+#             */
-/*   Updated: 2024/05/08 17:42:48 by nbidal           ###   ########.fr       */
+/*   Updated: 2024/05/08 17:58:41 by nbidal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include "ft_printf/ft_printf.h"
 
 int	ft_recursive_power(int nb, int power)
 {

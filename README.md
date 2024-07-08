@@ -10,4 +10,4 @@
 4. The server will stay open waiting to receive messages until you close the terminal or press CTRL + C.
 
 ## Grade
-I only the Bonus part partially so I got **115**.
+I only did the Bonus partially so I got **115**.
